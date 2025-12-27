@@ -71,5 +71,26 @@ namespace ApiContatos.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update (int id, Contato contato)
+        {
+            var contatoExistente = await _context.Contatos.FindAsync(id);
+            if (contatoExistente == null)
+            {
+                return NotFound();
+            }
+            if (!EmailValido(contato.Email)){
+                return BadRequest(new { messagem = "E-mail invalido!" });
+            }
+            contatoExistente.Nome = contato.Nome;
+            contatoExistente.Telefone = contato.Telefone;
+            contatoExistente.Endereco = contato.Endereco;
+            contatoExistente.Categoria = contato.Categoria;
+            contatoExistente.Email = contato.Email;
+            _context.Contatos.Update(contatoExistente);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }
