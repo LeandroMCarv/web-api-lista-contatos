@@ -1,7 +1,9 @@
 ﻿using ApiContatos.Data;
+using ApiContatos.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Mail;
 
 namespace ApiContatos.Controllers
 {
@@ -28,9 +30,33 @@ namespace ApiContatos.Controllers
             var contato = await _context.Contatos.FindAsync(id);
             if (contato == null)
             {
-                return NotFound();
+                return NotFound(new {mensagem = "Contato não encontrado."});
             }
             return Ok(contato);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Contato contato) {
+            if (!EmailValido(contato.Email))
+            {
+                return BadRequest(new { mensagem = "E-mail incorreto!" });
+            }
+            _context.Contatos.Add(contato);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetPorId),new {id = contato.Id}, contato);
+        }
+
+        private bool EmailValido(string email)
+        {
+            try
+            {
+                var mail = new MailAddress(email);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
