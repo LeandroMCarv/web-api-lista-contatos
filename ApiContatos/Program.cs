@@ -1,6 +1,5 @@
 using ApiContatos.Data;
 using Microsoft.EntityFrameworkCore;
-using Scalar;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);

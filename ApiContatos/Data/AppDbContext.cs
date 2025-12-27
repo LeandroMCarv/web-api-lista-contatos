@@ -8,7 +8,7 @@ namespace ApiContatos.Data
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            
+
         }
 
         public DbSet<Contato> Contatos { get; set; }
