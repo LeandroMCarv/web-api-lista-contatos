@@ -58,5 +58,18 @@ namespace ApiContatos.Controllers
                 return false;
             }
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var contato = await _context.Contatos.FindAsync(id);
+            if (contato == null)
+            {
+                return NotFound();
+            }
+            _context.Contatos.Remove(contato);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }
